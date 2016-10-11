@@ -1,85 +1,79 @@
-from random import randrange
-import swiftclient.client
-import time, os, sys, inspect
+import time, os, sys
+import inspect
 from os import environ as env
-
+from  novaclient import client
 import keystoneclient.v3.client as ksclient
 from keystoneauth1 import loading
 from keystoneauth1 import session
 
-config = {'username':os.environ['OS_USERNAME'], 
-          'api_key':os.environ['OS_PASSWORD'],
-          'project_id':os.environ['OS_TENANT_NAME'],
-          'auth_url':os.environ['OS_AUTH_URL'],
-           }
-from novaclient.client import Client
-nova = Client('2',**config)
 
-# Create instanovae
-def initWrk(worker_number):
-	worker_name = "anna_wrk_%i" %worker_number
-	import time 
-	print 1
-	image = nova.images.find(name="Ubuntu-16.04")
-	print 2
-	flavor = nova.flavors.find(name="m1.small")
-	print 3
-	network = nova.networks.find(label="g2015034-net_2")
-	keypair = nova.keypairs.find(name="anno7997")	
-	ud = open('userdata2.yml', 'r')
-	nova.keypairs.list()
-	#f = open('cloud.key.pub','r')
-	#publickey = f.readline()[:-1]
-	#keypair = nova.keypairs.create('mathieukeypair',publickey)
-	#f.close()
-	instance = nova.servers.create(name = worker_name ,image = image.id,flavor = flavor.id,network = network.id,
-	 key_name = keypair.name, userdata = ud)
-	time.sleep(5)
-	#try:
-	#	if nova.floating_ips.list():
-	#		floating_ip = nova.floating_ips.list()[0]
-	#		print "*** uses old ip: %s ***" %(floating_ip.ip)
-	#	else:
-	#		floating_ip = nova.floating_ips.create(nova['floating_ip_pool'])
-	#		print "*** no ip available, creating new ip: %s ***" %(floating_ip.ip)
-	#	server.add_floating_ip(floating_ip)
-	#except Exception as e:
-	#	raise ProviderException("Failed to attach a floating IP to the controller.\n{0}".format(e))
+flavor = "m1.small" 
+private_net = "g2015034-net_2"
+#floating_ip_pool_name = None
+#floating_ip = None
 
-	#floating_ip = nova.floating_ips.create(nova.floating_ip_pools.list()[0].name)
-	#server.add_floating_ip(floating_ip)
-	#print floating_ip.ip
+loader = loading.get_plugin_loader('password')
+auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
+                                username=env['OS_USERNAME'],
+                                password=env['OS_PASSWORD'],
+                                project_name=env['OS_PROJECT_NAME'],
+                                user_domain_name=env['OS_USER_DOMAIN_NAME'],
+                                project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
 
-	floating_ip_information_list = nova.floating_ips.list()
-	floating_ip_list = []
-	#print floating_ip_information_list
-	for floating_ip_information in floating_ip_information_list:
-		if getattr(floating_ip_information, 'fixed_ip') == None:
-			floating_ip_list.append(getattr(floating_ip_information, 'ip'))
 
-	if len(floating_ip_list) == 0:
-		new_ip = nova.floating_ips.create(getattr(nova.floating_ip_pools.list()[0],'name'))
-		print new_ip
-		floating_ip_list.append(getattr(new_ip, 'ip'))
+sess = session.Session(auth=auth)
+nova = client.Client('2.1', session=sess)
+print "user authorization completed."import paramiko
+import time
 
-	floating_ip = floating_ip_list[0]
+workerIPs = []
+keypair = nova.keypairs.find(name="anno7997")
 
-	#iplist = nova.floating_ips.list()
-  	#if (len(iplist) < 1):
-  	#	print "No IP:s available!"
+for x in range(2):
+    
+    image = nova.images.find(name="Ubuntu-16.04")
+    flavor = nova.flavors.find(name="m1.small")
+
    
-  	#random_index = randrange(0,len(iplist))
-  	#ip_obj = iplist[random_index] # Pick random address
-  	#floating_ip = getattr(ip_obj, 'ip')
+    
+    if private_net != None:
+        net = nova.networks.find(label=private_net)
+        nics = [{'net-id': net.id}]
+    else:
+        sys.exit("private-net not defined.")
+
    
-  	print "Attaching IP:"
-  	print floating_ip
-  	server.add_floating_ip(floating_ip)
 
-#def main():
-#	for i in range(6,8):
-#		init(i)
+    print "Getting userdata..."
+    ud = open('userdataW.yml', 'r')
 
-if __name__ == "__main__":
-	initWrk(1)
+    print "Creating server..."
+    instance = nova.servers.create(name = "adamWorker", image = image, flavor = flavor,nics=nics, userdata=ud,key_name = keypair.name)
 
+    inst_status = instance.status
+    while inst_status == 'BUILD':
+        time.sleep(5)
+        # Retrieve the instance again so the status field updates
+        instance = nova.servers.get(instance.id)
+        inst_status = instance.status
+    print "status: %s" % inst_status
+
+    floating_ip = ''
+    while floating_ip == '':
+        iplist = nova.floating_ips.list()
+        for ip_obj in iplist:
+            if ((getattr(ip_obj,'instance_id')) == None):
+                floating_ip = getattr(ip_obj, 'ip')
+                workerIPs.append(floating_ip)
+                break    
+
+    print "Attaching IP:"
+    print floating_ip
+    instance.add_floating_ip(floating_ip)
+
+
+wait_time = 300
+for i in range(0,(wait_time/10)):
+    time.sleep(10)
+    wait_time -= 10
+    print str(wait_time)+"s remaining..."
