@@ -14,15 +14,15 @@ import urllib2
 from collections import Counter
 
 app = Flask(__name__)
-app = Celery('tasks', backend='amqp', broker='amqp://an:no@130.238.29.13:5672/anno')
+#app = Celery('tasks', backend='amqp', broker='amqp://an:no@130.238.29.13:5672/anno')
 
 
 
 #@app.route('/test', methods=['GET'])
 #def print_hello():
 #	return 'Tjo Valle! Allt bra? :)', 200
-@app.task()
-#@app.route('/Labb3/messaging', methods=['GET'])
+#@app.task()
+@app.route('/Labb3/messaging', methods=['GET'])
 def cow_say():
 	req = urllib2.Request("http://smog.uppmax.uu.se:8080/swift/v1/tweets")
 	response = urllib2.urlopen(req)

@@ -10,6 +10,7 @@ packages:
     - rabbitmq-server
 
 runcmd:
+    - sudo pip install --upgrade pip
     - pip install Flask
     - git clone https://github.com/annanormark/Lab3_cloud.git
     - mv Lab3_cloud home/ubuntu/Lab3/
@@ -20,5 +21,3 @@ runcmd:
     - sudo rabbitmqctl add_user an no
     - sudo rabbitmqctl add_vhost anno
     - sudo rabbitmqctl set_permissions -p anno ad ".*" ".*" ".*"
-    - sudo -H -u ubuntu bash -c "python app.py &" 
-    - sudo -H -u ubuntu bash -c "celery flower -A tasks &" 

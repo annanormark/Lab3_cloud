@@ -9,6 +9,7 @@ packages:
     - python-swiftclient
 
 runcmd:
+    - sudo pip install --upgrade pip
     - git clone https://github.com/annanormark/Lab3_cloud.git
     - mv Lab3_cloud home/ubuntu/Lab3
     - chmod -R 777 home/ubuntu/Lab3

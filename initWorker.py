@@ -50,7 +50,7 @@ for x in range(2):
     ud = open('userdataW.yml', 'r')
 
     print "Creating server..."
-    instance = nova.servers.create(name = "adamWorker", image = image, flavor = flavor,nics=nics, userdata=ud,key_name = keypair.name)
+    instance = nova.servers.create(name = "annaWorker", image = image, flavor = flavor,nics=nics, userdata=ud,key_name = keypair.name)
 
     inst_status = instance.status
     while inst_status == 'BUILD':
