@@ -23,7 +23,9 @@ auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
 
 sess = session.Session(auth=auth)
 nova = client.Client('2.1', session=sess)
-print "user authorization completed."import paramiko
+print "user authorization completed."
+
+import paramiko
 import time
 
 workerIPs = []
