@@ -12,7 +12,6 @@ config = {'username':os.environ['OS_USERNAME'],
           'project_id':os.environ['OS_TENANT_NAME'],
           'auth_url':os.environ['OS_AUTH_URL'],
            }
-from novaclient import client
 from novaclient.client import Client
 nova = Client('2',**config)
 
