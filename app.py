@@ -14,7 +14,7 @@ import urllib2
 from collections import Counter
 
 app = Flask(__name__)
-app = Celery('tasks', backend='amqp', broker='amqp://an:no@130.238.29.205:5672/anno')
+app = Celery('tasks', backend='amqp', broker='amqp://an:no@130.238.29.113:5672/anno')
 
 
 
