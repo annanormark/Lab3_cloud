@@ -10,7 +10,7 @@ packages:
 
 runcmd:
     - git clone https://github.com/annanormark/Lab3_cloud.git
-    - mv Labb3 home/ubuntu/Lab3
+    - mv Lab3_cloud home/ubuntu/Lab3
     - chmod -R 777 home/ubuntu/Lab3
     - cd home/ubuntu/Lab3/
     - pip install celery

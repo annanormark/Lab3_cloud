@@ -12,8 +12,8 @@ packages:
 runcmd:
     - pip install Flask
     - git clone https://github.com/annanormark/Lab3_cloud.git
-    - mv Lab3_cloud home/ubuntu/Lab3
-    - chmod -R 777 home/ubuntu/Lab3
+    - mv Lab3_cloud home/ubuntu/Lab3/
+    - chmod -R 777 home/ubuntu/Lab3/
     - cd home/ubuntu/Lab3
     - pip install celery
     - pip install flower
