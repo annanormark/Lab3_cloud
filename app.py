@@ -22,7 +22,7 @@ app = Flask(__name__)
 #def print_hello():
 #	return 'Tjo Valle! Allt bra? :)', 200
 #@app.task()
-@app.route('/Labb3/messaging', methods=['GET'])
+@app.route('/Lab3', methods=['GET'])
 def cow_say():
 	req = urllib2.Request("http://smog.uppmax.uu.se:8080/swift/v1/tweets")
 	response = urllib2.urlopen(req)
