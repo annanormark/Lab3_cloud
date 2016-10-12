@@ -21,3 +21,5 @@ runcmd:
     - sudo rabbitmqctl add_user an no
     - sudo rabbitmqctl add_vhost anno
     - sudo rabbitmqctl set_permissions -p anno an ".*" ".*" ".*"
+    - sudo -H -u ubuntu bash -c "python app.py &" 
+    - sudo -H -u ubuntu bash -c "celery flower -A tasks &”
