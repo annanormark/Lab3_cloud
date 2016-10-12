@@ -44,12 +44,12 @@ secgroup = nova.security_groups.find(name="default")
 secgroups = [secgroup.id]
 
 #floating_ip = nova.floating_ips.create(nova.floating_ip_pools.list()[0].name)
-floating_ip_pool_name = nova.floating_ip_pools.list()[0].name
+#floating_ip_pool_name = nova.floating_ip_pools.list()[0].name
 
-if floating_ip_pool_name != None: 
-    floating_ip = nova.floating_ips.create(floating_ip_pool_name)
-else: 
-    sys.exit("public ip pool name not defined.")
+#if floating_ip_pool_name != None: 
+#floating_ip = nova.floating_ips.create("130.238.29.31")#floating_ip_pool_name)
+#else: 
+ #   sys.exit("public ip pool name not defined.")
 
 
 keypair = nova.keypairs.find(name="anno7997")
@@ -68,8 +68,18 @@ while inst_status == 'BUILD':
 
 print "Instance: "+ instance.name +" is in " + inst_status + "state"
 
-if floating_ip.ip != None: 
-    instance.add_floating_ip("130.238.29.31")
-    print "Instance booted! Name: " + instance.name + " Status: " +instance.status+ ", floating IP attached " + floating_ip.ip
-else:
-    print "Instance booted! Name: " + instance.name + " Status: " +instance.status+ ", floating IP missing"
+#if floating_ip.ip != None: 
+#    instance.add_floating_ip("130.238.29.31")
+#    print "Instance booted! Name: " + instance.name + " Status: " +instance.status+ ", floating IP attached " + floating_ip.ip
+#else:
+#    print "Instance booted! Name: " + instance.name + " Status: " +instance.status+ ", floating IP missing"
+floating_ip = "130.238.29.31"
+print 'attaching ip: ' 
+print floating_ip
+instance.add_floating_ip(floating_ip)
+
+
+
+
+
+

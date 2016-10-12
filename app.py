@@ -18,9 +18,10 @@ app = Flask(__name__)
 
 
 
-#@app.route('/test', methods=['GET'])
-#def print_hello():
-#	return 'Tjo Valle! Allt bra? :)', 200
+@app.route('/test', methods=['GET'])
+def print_hello():
+	return 'Tjo Valle! Allt bra? :)', 200
+
 #@app.task()
 @app.route('/Lab3', methods=['GET'])
 def cow_say():
@@ -29,7 +30,7 @@ def cow_say():
 	tweetsObject = response.read().split()
 
 
-	job = group(parseTweets(i) for i in tweetsObject)
+	job = group(parseTweets.s(i) for i in tweetsObject)
 	tweetTask = job.apply_async()
 	#tweetTask.save()
 
