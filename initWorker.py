@@ -47,10 +47,10 @@ for x in range(2):
    
 
     print "Getting userdata..."
-    ud = open('userdataW.yml', 'r')
+    ud = open('userdata2.yml', 'r')
 
     print "Creating server..."
-    instance = nova.servers.create(name = "annaWorker", image = image, flavor = flavor,nics=nics, userdata=ud,key_name = keypair.name)
+    instance = nova.servers.create(name = "annaWorker" + str(x), image = image, flavor = flavor,nics=nics, userdata=ud,key_name = keypair.name)
 
     inst_status = instance.status
     while inst_status == 'BUILD':
@@ -60,18 +60,18 @@ for x in range(2):
         inst_status = instance.status
     print "status: %s" % inst_status
 
-    floating_ip = ''
-    while floating_ip == '':
-        iplist = nova.floating_ips.list()
-        for ip_obj in iplist:
-            if ((getattr(ip_obj,'instance_id')) == None):
-                floating_ip = getattr(ip_obj, 'ip')
-                workerIPs.append(floating_ip)
-                break    
+    #floating_ip = ''
+    #while floating_ip == '':
+    #    iplist = nova.floating_ips.list()
+    #    for ip_obj in iplist:
+    #        if ((getattr(ip_obj,'instance_id')) == None):
+    #            floating_ip = getattr(ip_obj, 'ip')
+    #            workerIPs.append(floating_ip)
+    #            break    
 
-    print "Attaching IP:"
-    print floating_ip
-    instance.add_floating_ip(floating_ip)
+    #print "Attaching IP:"
+    #print floating_ip
+    #instance.add_floating_ip(floating_ip)
 
 
 wait_time = 300
