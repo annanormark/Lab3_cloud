@@ -20,4 +20,4 @@ runcmd:
     - pip install flower
     - sudo rabbitmqctl add_user an no
     - sudo rabbitmqctl add_vhost anno
-    - sudo rabbitmqctl set_permissions -p anno ad ".*" ".*" ".*"
+    - sudo rabbitmqctl set_permissions -p anno an ".*" ".*" ".*"
